@@ -31,8 +31,19 @@ public class NotesListActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
 
         initRecyclerView();
+        insertFakeList();
 
+    }
 
+    private void insertFakeList() {
+        for (int i = 0; i < 100; i++){
+            Note note = new Note();
+            note.setTitle("title # " + i);
+            note.setContent("content # " + i);
+            note.setTimestamp("Jan 2020");
+            mNotes.add(note);
+        }
+        mNoteRecyclerAdapter.notifyDataSetChanged();
     }
 
     private void initRecyclerView() {
