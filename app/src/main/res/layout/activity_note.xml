@@ -16,6 +16,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/note_toolbar">
 
+            <include layout="@layout/layout_note_toolbar"/>
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

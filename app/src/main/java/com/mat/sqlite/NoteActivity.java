@@ -21,5 +21,10 @@ public class NoteActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: selected");
         }
 
+        //View
+
+        //Edit
+
+
     }
 }
