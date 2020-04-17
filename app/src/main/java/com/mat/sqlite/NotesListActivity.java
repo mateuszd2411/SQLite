@@ -1,13 +1,14 @@
 package com.mat.sqlite;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.mat.sqlite.adapters.NotesRecyclerAdapter;
 import com.mat.sqlite.models.Note;
@@ -15,7 +16,9 @@ import com.mat.sqlite.util.VerticalSpacingItemDecorator;
 
 import java.util.ArrayList;
 
-public class NotesListActivity extends AppCompatActivity implements NotesRecyclerAdapter.OnNoteListener{
+public class NotesListActivity extends AppCompatActivity implements
+        NotesRecyclerAdapter.OnNoteListener,
+        View.OnClickListener {
 
     private static final String TAG = "TAG";
 
@@ -32,6 +35,8 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
         setContentView(R.layout.activity_notes_list);
 
         mRecyclerView = findViewById(R.id.recyclerView);
+
+        findViewById(R.id.fab).setOnClickListener(this);
 
         initRecyclerView();
         insertFakeList();
@@ -69,5 +74,11 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
         intent.putExtra("selected_note",mNotes.get(position));
         startActivity(intent);
         
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(this,NoteActivity.class);
+        startActivity(intent);
     }
 }
