@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/lightYellow">
+    android:background="@color/lightYellow"
+    >
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <EditText
+    <com.mat.sqlite.LineEditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/note_text"
