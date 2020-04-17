@@ -17,7 +17,8 @@ import com.mat.sqlite.models.Note;
 public class NoteActivity extends AppCompatActivity implements
         View.OnTouchListener,
         GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener{
+        GestureDetector.OnDoubleTapListener,
+        View.OnClickListener {
 
     private static final String TAG = "selected";
     private static final int EDIT_MODE_ENABLED = 1;
@@ -66,6 +67,8 @@ public class NoteActivity extends AppCompatActivity implements
     private void setListeners(){
         mLineEditText.setOnTouchListener(this);
         mGestureDetector = new GestureDetector(this,this);
+        mTextView.setOnClickListener(this);
+        mCheck.setOnClickListener(this);
     }
 
 
@@ -166,5 +169,24 @@ public class NoteActivity extends AppCompatActivity implements
     @Override
     public boolean onDoubleTapEvent(MotionEvent motionEvent) {
         return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            case R.id.toolbar_check:{
+                disableEditMode();
+                break;
+            }
+
+            case R.id.note_text_title:{
+                enableEditMode();
+                mEditText.requestFocus();
+                mEditText.setSelection(mEditText.length());
+                break;
+            }
+
+        }
     }
 }
