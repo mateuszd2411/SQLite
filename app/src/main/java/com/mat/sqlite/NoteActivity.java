@@ -4,12 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mat.sqlite.models.Note;
 
-public class NoteActivity extends AppCompatActivity {
+public class NoteActivity extends AppCompatActivity implements
+        View.OnTouchListener,
+        GestureDetector.OnGestureListener,
+        GestureDetector.OnDoubleTapListener{
 
     private static final String TAG = "selected";
 
@@ -21,6 +27,7 @@ public class NoteActivity extends AppCompatActivity {
     // vars
     private boolean mIsNewNote;
     private Note mInitialNote;
+    private GestureDetector mGestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,13 @@ public class NoteActivity extends AppCompatActivity {
             setNoteProperties();
         }
 
+        setListeners();
+
+    }
+
+    private void setListeners(){
+        mLineEditText.setOnTouchListener(this);
+        mGestureDetector = new GestureDetector(this,this);
     }
 
 
@@ -64,5 +78,58 @@ public class NoteActivity extends AppCompatActivity {
     private void setNewNoteProperties(){
         mTextView.setText("Note Title");
         mEditText.setText("Note Title");
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+
+
+        return mGestureDetector.onTouchEvent(motionEvent);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent motionEvent) {
+        Log.d(TAG, "onDoubleTap: double");
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+        return false;
     }
 }
