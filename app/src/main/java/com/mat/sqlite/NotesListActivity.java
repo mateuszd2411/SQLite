@@ -50,6 +50,9 @@ public class NotesListActivity extends AppCompatActivity implements
         retrieveNotes();
 //        insertFakeList();
 
+
+        Log.d(TAG, "onCreate: thread +" +  Thread.currentThread().getName());
+
         setSupportActionBar((Toolbar)findViewById(R.id.notes_toolbar));
         setTitle("Notes");
 

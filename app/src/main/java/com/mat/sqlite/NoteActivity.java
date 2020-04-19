@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mat.sqlite.models.Note;
+import com.mat.sqlite.percistence.NoteRepository;
 
 public class NoteActivity extends AppCompatActivity implements
         View.OnTouchListener,
@@ -39,6 +40,8 @@ public class NoteActivity extends AppCompatActivity implements
     private Note mInitialNote;
     private GestureDetector mGestureDetector;
     private int mMode;
+    private NoteRepository mNoterepository;
+    private Note mFinalNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,8 @@ public class NoteActivity extends AppCompatActivity implements
         mBackArrowContainer = findViewById(R.id.back_arrow_container);
         mCheck = findViewById(R.id.toolbar_check);
         mBackArrow = findViewById(R.id.toolbar_back_arrow);
+
+        mNoterepository = new NoteRepository(this);
 
         if (getIncomingIntent()){
             // this is a new note, (EDIT MODE)
@@ -80,7 +85,8 @@ public class NoteActivity extends AppCompatActivity implements
     private boolean getIncomingIntent(){
         if (getIntent().hasExtra("selected_note")){
             mInitialNote = getIntent().getParcelableExtra("selected_note");
-            Log.d(TAG, "getIncomingIntent: " + mInitialNote.toString());
+            mFinalNote = getIntent().getParcelableExtra("selected_note");
+//            Log.d(TAG, "getIncomingIntent: " + mInitialNote.toString());
 
             mMode = EDIT_MODE_DISABLED;
             mIsNewNote = false;
@@ -89,6 +95,18 @@ public class NoteActivity extends AppCompatActivity implements
         mMode = EDIT_MODE_ENABLED;
         mIsNewNote = true;
         return true;
+    }
+
+    private void saveChanges(){
+        if (mIsNewNote){
+            saveNewNote();
+        }else {
+
+        }
+    }
+
+    private void saveNewNote(){
+        mNoterepository.insertNoteTask(mFinalNote);
     }
 
     private void disableContentInteraction(){
@@ -130,6 +148,21 @@ public class NoteActivity extends AppCompatActivity implements
 
         disableContentInteraction();
 
+        String temp = mLineEditText.getText().toString();
+        temp = temp.replace("\n","");
+        temp = temp.replace(" ","");
+        if (temp.length() > 0){
+            mFinalNote.setTitle(mEditText.getText().toString());
+            mFinalNote.setContent(mLineEditText.getText().toString());
+            String timestamp = "Jan 2020";
+            mFinalNote.setTimestamp(timestamp);
+
+            if (!mFinalNote.getContent().equals(mInitialNote.getContent())
+                    || !mFinalNote.getTitle().equals(mInitialNote.getTitle())){
+                saveChanges();
+            }
+        }
+
     }
 
     private void hideSoftKeyboard(){
@@ -149,6 +182,11 @@ public class NoteActivity extends AppCompatActivity implements
     private void setNewNoteProperties(){
         mTextView.setText("Note Title");
         mEditText.setText("Note Title");
+
+        mInitialNote = new Note();
+        mFinalNote = new Note();
+        mInitialNote.setTitle("Note Title");
+        mFinalNote.setTitle("Note Title");
     }
 
     @Override

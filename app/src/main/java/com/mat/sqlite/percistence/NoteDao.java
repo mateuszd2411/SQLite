@@ -12,7 +12,7 @@ import com.mat.sqlite.models.Note;
 import java.util.List;
 
 @Dao
-public interface NoteDeo {
+public interface NoteDao {
 
     @Insert
     long[] insertNotes(Note... notes);          /// ... is []
