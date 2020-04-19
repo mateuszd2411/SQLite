@@ -26,7 +26,7 @@ public class NoteRepository {
 
     public LiveData<List<Note>> retrieveNotesTask(){
 
-        return null;
+        return mNoteDatabase.getNoteDao().getNotes();
     }
 
     public void deleteNote(){
