@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.mat.sqlite.models.Note;
 import com.mat.sqlite.percistence.NoteRepository;
+import com.mat.sqlite.util.Utility;
 
 public class NoteActivity extends AppCompatActivity implements
         View.OnTouchListener,
@@ -158,7 +159,7 @@ public class NoteActivity extends AppCompatActivity implements
         if (temp.length() > 0){
             mFinalNote.setTitle(mEditText.getText().toString());
             mFinalNote.setContent(mLineEditText.getText().toString());
-            String timestamp = "Jan 2020";
+            String timestamp = Utility.getCurrentTimestamp();
             mFinalNote.setTimestamp(timestamp);
 
             if (!mFinalNote.getContent().equals(mInitialNote.getContent())
