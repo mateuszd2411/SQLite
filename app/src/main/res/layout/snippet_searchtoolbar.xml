@@ -4,7 +4,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_height="50dp"
         android:layout_width="match_parent"
-        android:id="@+id/viewContactsToolbar"
+        android:id="@+id/searchToolbar"
         android:background="@drawable/grey_border_bottom">
 
         <androidx.appcompat.widget.Toolbar
