@@ -33,6 +33,8 @@ public class ViewContactsFragment extends Fragment {
         viewContactsBar = (AppBarLayout) view.findViewById(R.id.viewContactsToolbar);
         searchBar = (AppBarLayout) view.findViewById(R.id.searchToolbar);
 
+        setAppBarState(STANDARD_APPBAR);
+
         //navigation to add contacts fragment
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabAddContact);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +96,7 @@ public class ViewContactsFragment extends Fragment {
             View view = getView();
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             try {
-                imm.hideSoftInputFromInputMethod(view.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
 
             } catch (NullPointerException e) {
                 Log.d(TAG, "setAppBarState: NullPointerException" + e.getMessage());
@@ -108,5 +110,11 @@ public class ViewContactsFragment extends Fragment {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setAppBarState(STANDARD_APPBAR);
     }
 }
