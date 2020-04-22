@@ -1,10 +1,12 @@
 package com.mat.sqlitetut;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -62,6 +64,10 @@ public class ViewContactsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Initiates the appbar state toggle
+     */
+
     private void toggleToolBarState() {
         Log.d(TAG, "toggleToolBarState: toggling AppBarState");
         if (mAppBarState == STANDARD_APPBAR){
@@ -71,6 +77,10 @@ public class ViewContactsFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the appbar state for either the search mode or standard mode
+     * @param state
+     */
     private void setAppBarState(int state) {
         Log.d(TAG, "setAppBarState: change app bar state to: " + state);
 
@@ -79,11 +89,24 @@ public class ViewContactsFragment extends Fragment {
         if (mAppBarState == STANDARD_APPBAR){
             searchBar.setVisibility(View.GONE);
             viewContactsBar.setVisibility(View.VISIBLE);
+
+            ///hide the keyboard
+            View view = getView();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            try {
+                imm.hideSoftInputFromInputMethod(view.getWindowToken(),0);
+
+            } catch (NullPointerException e) {
+                Log.d(TAG, "setAppBarState: NullPointerException" + e.getMessage());
+            }
         }
 
         else if (mAppBarState == SEARCH_APPBAR){
             viewContactsBar.setVisibility(View.GONE);
             searchBar.setVisibility(View.VISIBLE);
+            ///open the keyboard
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
         }
     }
 }
