@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SQLiteTut</string>
+
+    <!-- fragment names -->
+    <string name="edit_contact_fragment">EditContactFragment</string>
+    <string name="contact_fragment">ContactFragment</string>
 </resources>

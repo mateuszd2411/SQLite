@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -104,6 +106,20 @@ public class ViewContactsFragment extends Fragment {
 
         adapter = new CustomListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"https://");
         contactsList.setAdapter(adapter);
+
+        contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG, "onItemClick: navigating to " + getString(R.string.contact_fragment));
+                ContactFragment fragment = new ContactFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                //replace whatever is in the fragment container view with this fragment,
+                // and the transaction to the back stack so the user can navigate back
+                transaction.replace(R.id.fragment_container,fragment);
+                transaction.addToBackStack(getString(R.string.contact_fragment));
+                transaction.commit();
+            }
+        });
     }
 
     /**
