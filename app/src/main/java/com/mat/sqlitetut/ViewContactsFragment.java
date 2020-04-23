@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,16 +16,24 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mat.sqlitetut.Utils.CustomListAdapter;
+import com.mat.sqlitetut.models.Contact;
+
+import java.util.ArrayList;
 
 public class ViewContactsFragment extends Fragment {
 
     private static final String TAG = "ViewContactsFragment";
+
+    private String testImageURL = "www.android.com/static/2016/img/share/andy-sm.png";
 
     private static final int STANDARD_APPBAR = 0;
     private static final int SEARCH_APPBAR = 1;
     private int mAppBarState;
 
     private AppBarLayout viewContactsBar, searchBar;
+    private CustomListAdapter adapter;
+    private ListView contactsList;
 
     @Nullable
     @Override
@@ -32,8 +41,11 @@ public class ViewContactsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_viewcontacts,container,false);
         viewContactsBar = (AppBarLayout) view.findViewById(R.id.viewContactsToolbar);
         searchBar = (AppBarLayout) view.findViewById(R.id.searchToolbar);
+        contactsList = (ListView) view.findViewById(R.id.contactsList);
 
         setAppBarState(STANDARD_APPBAR);
+
+        setupContactsList();
 
         //navigation to add contacts fragment
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabAddContact);
@@ -64,6 +76,34 @@ public class ViewContactsFragment extends Fragment {
 
 
         return view;
+    }
+
+    ///https://
+    private void setupContactsList(){
+        final ArrayList<Contact> contacts = new ArrayList<>();
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+
+        adapter = new CustomListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"https://");
+        contactsList.setAdapter(adapter);
     }
 
     /**

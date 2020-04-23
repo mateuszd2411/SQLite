@@ -6,6 +6,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.mat.sqlitetut.Utils.UniversalImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -15,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: started");
+
+        InitImageLoader();
 
         init();
     }
@@ -30,5 +37,10 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container,fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void InitImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(MainActivity.this);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 }
