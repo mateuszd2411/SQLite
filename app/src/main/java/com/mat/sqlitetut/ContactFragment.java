@@ -17,10 +17,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.mat.sqlitetut.models.Contact;
+
 public class ContactFragment extends Fragment {
     private static final String TAG = "ContactFragment";
 
+    // This will evade the nullpointer exception when adding to a new bundle from MainActivity
+    public ContactFragment(){
+        super();
+        setArguments(new Bundle());
+    }
+
     private Toolbar toolbar;
+    private Contact mContact;
 
     @Nullable
     @Override
@@ -28,6 +37,11 @@ public class ContactFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contact,container,false);
         toolbar = (Toolbar) view.findViewById(R.id.contactToolbar);
         Log.d(TAG, "onCreateView: started");
+        mContact = getContactFromBundle();
+
+        if (mContact != null){
+            Log.d(TAG, "onCreateView: received contact: " + mContact.getName());
+        }
 
         // required for setting up the toolbar
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
@@ -50,13 +64,7 @@ public class ContactFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked the edit icon");
-                EditContactFragment fragment = new EditContactFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                //replace whatever is in the fragment container view with this fragment,
-                // and the transaction to the back stack so the user can navigate back
-                transaction.replace(R.id.fragment_container,fragment);
-                transaction.addToBackStack(getString(R.string.edit_contact_fragment));
-                transaction.commit();
+
             }
         });
         return view;
@@ -76,5 +84,16 @@ public class ContactFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private Contact getContactFromBundle(){
+        Log.d(TAG, "getContactFromBundle: arguments" + getArguments());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null){
+            return bundle.getParcelable(getString(R.string.contact));
+        }else {
+            return null;
+        }
     }
 }
