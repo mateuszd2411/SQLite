@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,7 +87,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        lv_customersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CustomerModel clickedCustomer = (CustomerModel) parent.getItemAtPosition(position);
+                dataBaseHelper.deleteOne(clickedCustomer);
+                //update
+                ShowCustomersOnListView(dataBaseHelper);
+                Toast.makeText(MainActivity.this, "Deleted " + clickedCustomer.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
