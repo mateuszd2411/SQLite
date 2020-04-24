@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     Switch sw_activiteCustomer;
     ListView lv_customersList;
 
+    ArrayAdapter customerArrayAdapter;
+    DataBaseHelper dataBaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
         et_age = findViewById(R.id.et_age);
         sw_activiteCustomer = findViewById(R.id.sw_active);
         lv_customersList = findViewById(R.id.lv_customerList);
+
+        dataBaseHelper = new DataBaseHelper(MainActivity.this);
+
+        // on app launch
+        ShowCustomersOnListView(dataBaseHelper);
 
         // button listeners for the add and view all buttons
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -48,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Error creating customer", Toast.LENGTH_SHORT).show();
                     customerModel = new CustomerModel(-1,"error",0,false);
 
-
-
                 }
 
                 DataBaseHelper dataBaseHelper = new DataBaseHelper(MainActivity.this);
@@ -57,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 boolean success = dataBaseHelper.addOne(customerModel);
 
                 Toast.makeText(MainActivity.this, "Success = " +success, Toast.LENGTH_SHORT).show();
+
+                //for update list when click add button
+                ShowCustomersOnListView(dataBaseHelper);
 
             }
         });
@@ -66,14 +76,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 DataBaseHelper dataBaseHelper = new DataBaseHelper(MainActivity.this);
-                List<CustomerModel> everyone = dataBaseHelper.getEveryone();
 
-                Toast.makeText(MainActivity.this, everyone.toString(), Toast.LENGTH_SHORT).show();
+                //on viewAll click
+                ShowCustomersOnListView(dataBaseHelper);
+
+
+//                Toast.makeText(MainActivity.this, everyone.toString(), Toast.LENGTH_SHORT).show();
 
             }
         });
 
 
 
+    }
+
+    private void ShowCustomersOnListView(DataBaseHelper dataBaseHelper2) {
+        customerArrayAdapter = new ArrayAdapter<CustomerModel>(MainActivity.this, android.R.layout.simple_list_item_1, dataBaseHelper2.getEveryone());     // simple_list_item_1  default android list
+        lv_customersList.setAdapter(customerArrayAdapter);
     }
 }
