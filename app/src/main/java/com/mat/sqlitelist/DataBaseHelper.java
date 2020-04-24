@@ -1,5 +1,6 @@
 package com.mat.sqlitelist;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -27,10 +28,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(createTableStatement);
     }
 
-
     // this is called if the database version number changes. It prevents previous users apps from breaking when you change the database design. (Version)
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+    }
+
+    public boolean addOne(CustomerModel customerModel){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_CUSTOMER_NAME, customerModel.getName());
+        cv.put(COLUMN_CUSTOMER_AGE, customerModel.getAge());
+        cv.put(COLUMN_ACTIVE_CUSTOMER, customerModel.isActive());
+        /// id is auto increment
+
+        long insert = db.insert(CUSTOMER_TABLE, null, cv);
+        if (insert == -1){
+            return  false;
+        }else {
+            return true;
+        }
 
     }
 }

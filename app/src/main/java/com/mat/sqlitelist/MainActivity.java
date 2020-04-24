@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Error creating customer", Toast.LENGTH_SHORT).show();
                 }
 
+                DataBaseHelper dataBaseHelper = new DataBaseHelper(MainActivity.this);
+
 
             }
         });
