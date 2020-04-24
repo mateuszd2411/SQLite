@@ -2,10 +2,14 @@ package com.mat.sqlitelist;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -51,5 +55,42 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         }
 
+    }
+
+    public List<CustomerModel> getEveryone(){
+
+        List<CustomerModel> returnList = new ArrayList<>();
+
+        //get data from the database
+
+        String queryString = "SELECT * FROM " + CUSTOMER_TABLE;     //SQL Query
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(queryString,null);
+
+        if (cursor.moveToFirst()){
+            //loop through the cursor (result set) and create new customer objects. Put them into the return list
+            do {
+                int customerID = cursor.getInt(0);
+                String customerName = cursor.getString(1);
+                int customerAge = cursor.getInt(2);
+
+                /// Java Ternary Operator       https://www.geeksforgeeks.org/java-ternary-operator-with-examples/
+                boolean customerActive = cursor.getInt(3) == 1 ? true: false;
+
+                CustomerModel newCustomer = new CustomerModel(customerID,customerName,customerAge,customerActive);
+                returnList.add(newCustomer);
+
+            }while (cursor.moveToNext());
+
+        }else {
+            // failure do not add anything to the list.
+        }
+
+        //close both the cursor and th db when done.
+        cursor.close();
+        db.close();
+        return returnList;
     }
 }
