@@ -15,11 +15,30 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements ViewContactsFragment.OnContactSelectedListener {
+public class MainActivity extends AppCompatActivity implements
+        ViewContactsFragment.OnContactSelectedListener,
+        ContactFragment.OnEditContactListenner{
 
     private static final String TAG = "MainActivity";
 
     private static final int REQUEST_CODE = 1;
+
+    @Override
+    public void onEditContactSelected(Contact contact) {
+        Log.d(TAG, "OnContactSelected: contact selected from "
+                + getString(R.string.edit_contact_fragment)
+                + " " + contact.getName());
+
+        EditContactFragment fragment = new EditContactFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.contact),contact);
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container,fragment);
+        transaction.addToBackStack(getString(R.string.edit_contact_fragment));
+        transaction.commit();
+    }
 
     @Override
     public void OnContactSelected(Contact contact) {

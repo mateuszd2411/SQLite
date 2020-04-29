@@ -1,5 +1,6 @@
 package com.mat.sqlitetut;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactFragment extends Fragment{
     private static final String TAG = "ContactFragment";
+
+    public interface OnEditContactListenner{
+        public void onEditContactSelected(Contact contact);
+    }
+
+    OnEditContactListenner mOnEditContactListenner;
 
     //This will evade the nullpointer exception whena adding to a new bundle from MainActivity
     public ContactFragment(){
@@ -76,6 +83,7 @@ public class ContactFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked the edit icon.");
+                mOnEditContactListenner.onEditContactSelected(mContact);
 
             }
         });
@@ -111,6 +119,10 @@ public class ContactFragment extends Fragment{
         return super.onOptionsItemSelected(item);
     }
 
+
+    /*
+    Retries the selected contact from the bundle(coming from MainActivity
+     */
     private Contact getContactFromBundle(){
         Log.d(TAG, "getContactFromBundle: arguments: " + getArguments());
 
@@ -119,6 +131,17 @@ public class ContactFragment extends Fragment{
             return bundle.getParcelable(getString(R.string.contact));
         }else{
             return null;
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            mOnEditContactListenner = (OnEditContactListenner) getActivity();
+        }catch (ClassCastException e){
+            Log.d(TAG, "onAttach: ClassCastException: " + e.getMessage());
         }
     }
 }
