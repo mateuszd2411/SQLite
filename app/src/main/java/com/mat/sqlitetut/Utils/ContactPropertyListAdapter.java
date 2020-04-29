@@ -64,6 +64,7 @@ public class ContactPropertyListAdapter extends ArrayAdapter<String> {
 
         //-------------Stuff to change-------------
         final String property = getItem(position);
+        holder.property.setText(property);
 
         //check if it's an email or a phone number
         //email
