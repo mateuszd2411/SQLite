@@ -14,11 +14,10 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mat.sqlitetut.Utils.CustomListAdapter;
+import com.mat.sqlitetut.Utils.ContactListAdapter;
 import com.mat.sqlitetut.models.Contact;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class ViewContactsFragment extends Fragment {
     private int mAppBarState;
 
     private AppBarLayout viewContactsBar, searchBar;
-    private CustomListAdapter adapter;
+    private ContactListAdapter adapter;
     private ListView contactsList;
 
     @Nullable
@@ -123,7 +122,7 @@ public class ViewContactsFragment extends Fragment {
         contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
         contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
 
-        adapter = new CustomListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"https://");
+        adapter = new ContactListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"https://");
         contactsList.setAdapter(adapter);
 
         contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
