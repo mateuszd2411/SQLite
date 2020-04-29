@@ -1,6 +1,10 @@
 package com.mat.sqlitetut.Utils;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +15,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mat.sqlitetut.MainActivity;
 import com.mat.sqlitetut.R;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class ContactPropertyListAdapter extends ArrayAdapter<String> {
 
@@ -72,7 +79,20 @@ public class ContactPropertyListAdapter extends ArrayAdapter<String> {
             holder.leftIcon.setImageResource(mContext.getResources().getIdentifier("@drawable/ic_email",null,mContext.getPackageName()));
         }
         else if ((property.length()) != 0){
+            // Phone call
             holder.leftIcon.setImageResource(mContext.getResources().getIdentifier("@drawable/ic_phone",null,mContext.getPackageName()));
+            holder.leftIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (((MainActivity)mContext).checkPermission(Init.PHONE_PERMISSIONS)){
+                        Log.d(TAG, "onClick: imitating phone call...");
+                        Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel",property, null));
+                        mContext.startActivity(callIntent);
+                    } else {
+                        ((MainActivity)mContext).veryfyPermisions(Init.PHONE_PERMISSIONS);
+                    }
+                }
+            });
             holder.rightIcon.setImageResource(mContext.getResources().getIdentifier("@drawable/ic_message",null,mContext.getPackageName()));
         }
         //-----------------------------------------
