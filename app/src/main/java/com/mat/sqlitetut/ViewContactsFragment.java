@@ -1,6 +1,7 @@
 package com.mat.sqlitetut;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mat.sqlitetut.Utils.ContactListAdapter;
+import com.mat.sqlitetut.Utils.DatabaseHelper;
 import com.mat.sqlitetut.models.Contact;
 
 import java.util.ArrayList;
@@ -114,28 +117,47 @@ public class ViewContactsFragment extends Fragment {
     ///https://
     private void setupContactsList(){
         final ArrayList<Contact> contacts = new ArrayList<>();
-        contacts.add(new Contact("Gery","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Gery","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+//        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
 
-        adapter = new ContactListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"https://");
+        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+        Cursor cursor = databaseHelper.getAllContacts();
+
+        //iterate through all the rows contained in the database
+        if (!cursor.moveToNext()) {
+            Toast.makeText(getActivity(), "There are no contacts to show", Toast.LENGTH_SHORT).show();
+        }
+        while (cursor.moveToNext()) {
+            contacts.add(new Contact(
+                    cursor.getString(1),//name
+                    cursor.getString(2),//phone number
+                    cursor.getString(3),//device
+                    cursor.getString(4),//email
+                    cursor.getString(5)//profile image uri
+            ));
+        }
+
+        Log.d(TAG, "setupContactsList: image url: " + contacts.get(0).getProfileImage());
+
+        adapter = new ContactListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"");
 
         mSearchContacts.addTextChangedListener(new TextWatcher() {
             @Override
