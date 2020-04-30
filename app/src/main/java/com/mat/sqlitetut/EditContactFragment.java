@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.mat.sqlitetut.Utils.ChangePhotoDialog;
 import com.mat.sqlitetut.Utils.UniversalImageLoader;
 import com.mat.sqlitetut.models.Contact;
 
@@ -90,6 +91,9 @@ public class EditContactFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: opening the 'image selection dialog box'");
+
+                ChangePhotoDialog dialog = new ChangePhotoDialog();
+                dialog.show(getFragmentManager(), getString(R.string.change_photo_dialog));
             }
         });
 
