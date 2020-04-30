@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -18,12 +19,15 @@ import androidx.fragment.app.DialogFragment;
 
 import com.mat.sqlitetut.R;
 
+import java.io.File;
+
 public class ChangePhotoDialog extends DialogFragment {
 
     private static final String TAG = "ChangePhotoDialog";
 
     public interface OnPhotoReceivedListener{
         public void getBitmapImage(Bitmap bitmap);
+        public void getImagePath(String imagePath);
     }
 
     OnPhotoReceivedListener mOnPhotoReceivedListener;
@@ -51,7 +55,9 @@ public class ChangePhotoDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: accessing phones memory");
-
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, Init.PICKFILE_REQUEST_CODE);
             }
         });
 
@@ -97,5 +103,20 @@ public class ChangePhotoDialog extends DialogFragment {
             mOnPhotoReceivedListener.getBitmapImage(bitmap);
             getDialog().dismiss();
         }
+
+        /*
+        Result when selecting new image from from phone memory
+         */
+        if (requestCode == Init.PICKFILE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            Uri selectedImageUri = data.getData();
+            File file = new File(selectedImageUri.toString());
+            Log.d(TAG, "onActivityResult: images: " + file.getPath());
+
+
+            //send the bitmap and fragment to the interface
+            mOnPhotoReceivedListener.getImagePath(file.getPath());
+            getDialog().dismiss();
+        }
+
     }
 }

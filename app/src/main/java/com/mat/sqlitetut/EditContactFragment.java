@@ -174,5 +174,18 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
             ((MainActivity) getActivity()).compressBitmap(bitmap, 70);
             mContactImage.setImageBitmap(bitmap);
         }
+
     }
+
+    @Override
+    public void getImagePath(String imagePath) {
+        Log.d(TAG, "getImagePath: got the image path: " + imagePath);
+
+        if( !imagePath.equals("")){
+            imagePath = imagePath.replace(":/", "://");
+            mSelectedImagePath = imagePath;
+            UniversalImageLoader.setImage(imagePath, mContactImage, null, "");
+        }
+    }
+
 }
