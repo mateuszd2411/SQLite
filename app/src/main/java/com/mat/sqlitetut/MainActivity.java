@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,6 +14,7 @@ import com.mat.sqlitetut.Utils.UniversalImageLoader;
 import com.mat.sqlitetut.models.Contact;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements
@@ -84,6 +86,15 @@ public class MainActivity extends AppCompatActivity implements
     private void InitImageLoader(){
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(MainActivity.this);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
+    }
+
+    /*
+    Compress a bitmap by the @param "quality"
+     */
+    public Bitmap compressBitmap(Bitmap bitmap, int quality){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+        return bitmap;
     }
 
     // Generalized method for asking permission. Can pass any array of permissions

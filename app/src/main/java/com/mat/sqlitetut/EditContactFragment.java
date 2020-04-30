@@ -1,5 +1,6 @@
 package com.mat.sqlitetut;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +27,7 @@ import com.mat.sqlitetut.models.Contact;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditContactFragment extends Fragment {
+public class EditContactFragment extends Fragment implements ChangePhotoDialog.OnPhotoReceivedListener{
     private static final String TAG = "EditContactFragment";
 
     //This will evade the nullpointer exception whena adding to a new bundle from MainActivity
@@ -102,6 +103,7 @@ public class EditContactFragment extends Fragment {
                         if (i == Init.PERMISSIONS.length - 1){
                             ChangePhotoDialog dialog = new ChangePhotoDialog();
                             dialog.show(getFragmentManager(), getString(R.string.change_photo_dialog));
+                            dialog.setTargetFragment(EditContactFragment.this,0);
                         }
                     }else {
                         ((MainActivity)getActivity()).veryfyPermisions(permission);
@@ -128,20 +130,6 @@ public class EditContactFragment extends Fragment {
         mSelectDevice.setSelection(position);
     }
 
-    /*
-    Retries the selected contact from the bundle(coming from MainActivity
-     */
-    private Contact getContactFromBundle(){
-        Log.d(TAG, "getContactFromBundle: arguments: " + getArguments());
-
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            return bundle.getParcelable(getString(R.string.contact));
-        }else{
-            return null;
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.contact_menu, menu);
@@ -156,5 +144,35 @@ public class EditContactFragment extends Fragment {
                 Log.d(TAG, "onOptionsItemSelected: deleting contact.");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /*
+    Retries the selected contact from the bundle(coming from MainActivity
+     */
+    private Contact getContactFromBundle(){
+        Log.d(TAG, "getContactFromBundle: arguments: " + getArguments());
+
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            return bundle.getParcelable(getString(R.string.contact));
+        }else{
+            return null;
+        }
+    }
+
+
+    /*
+    Retrieves the selected image from the bundle (coming from ChangePhotoDialog)
+     */
+    @Override
+    public void getBitmapImage(Bitmap bitmap) {
+        Log.d(TAG, "getBitmapImage: got the bitmap: " + bitmap);
+        //get the bitmap from 'ChangePhotoDialog'
+        if (bitmap != null){
+            //compress the image (if you like)
+            ((MainActivity) getActivity()).compressBitmap(bitmap, 70);
+            mContactImage.setImageBitmap(bitmap);
+        }
     }
 }
