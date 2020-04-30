@@ -2,12 +2,15 @@ package com.mat.sqlitetut;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -21,6 +24,7 @@ import com.mat.sqlitetut.Utils.ContactListAdapter;
 import com.mat.sqlitetut.models.Contact;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ViewContactsFragment extends Fragment {
 
@@ -48,6 +52,7 @@ public class ViewContactsFragment extends Fragment {
     private AppBarLayout viewContactsBar, searchBar;
     private ContactListAdapter adapter;
     private ListView contactsList;
+    private EditText mSearchContacts;
 
     @Nullable
     @Override
@@ -56,6 +61,7 @@ public class ViewContactsFragment extends Fragment {
         viewContactsBar = (AppBarLayout) view.findViewById(R.id.viewContactsToolbar);
         searchBar = (AppBarLayout) view.findViewById(R.id.searchToolbar);
         contactsList = (ListView) view.findViewById(R.id.contactsList);
+        mSearchContacts = (EditText) view.findViewById(R.id.etSearchContacts);
 
         setAppBarState(STANDARD_APPBAR);
 
@@ -108,7 +114,7 @@ public class ViewContactsFragment extends Fragment {
     ///https://
     private void setupContactsList(){
         final ArrayList<Contact> contacts = new ArrayList<>();
-        contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
+        contacts.add(new Contact("Gery","7897454","mobile","mat@",testImageURL));
         contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
         contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
         contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
@@ -130,6 +136,25 @@ public class ViewContactsFragment extends Fragment {
         contacts.add(new Contact("Mat","7897454","mobile","mat@",testImageURL));
 
         adapter = new ContactListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"https://");
+
+        mSearchContacts.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String text = mSearchContacts.getText().toString().toLowerCase(Locale.getDefault());
+                adapter.filter(text);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         contactsList.setAdapter(adapter);
 
         contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
