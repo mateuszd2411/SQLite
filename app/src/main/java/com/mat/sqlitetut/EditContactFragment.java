@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.mat.sqlitetut.Utils.ChangePhotoDialog;
+import com.mat.sqlitetut.Utils.Init;
 import com.mat.sqlitetut.Utils.UniversalImageLoader;
 import com.mat.sqlitetut.models.Contact;
 
@@ -92,8 +93,20 @@ public class EditContactFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: opening the 'image selection dialog box'");
 
-                ChangePhotoDialog dialog = new ChangePhotoDialog();
-                dialog.show(getFragmentManager(), getString(R.string.change_photo_dialog));
+                /*
+                Make sure all permissions have been verified before opening the dialog
+                 */
+                for (int i = 0; i < Init.PERMISSIONS.length; i++) {
+                    String[] permission = {Init.PERMISSIONS[i]};
+                    if (((MainActivity)getActivity()).checkPermission(permission)){
+                        if (i == Init.PERMISSIONS.length - 1){
+                            ChangePhotoDialog dialog = new ChangePhotoDialog();
+                            dialog.show(getFragmentManager(), getString(R.string.change_photo_dialog));
+                        }
+                    }else {
+                        ((MainActivity)getActivity()).veryfyPermisions(permission);
+                    }
+                }
             }
         });
 
