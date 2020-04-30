@@ -1,10 +1,14 @@
 package com.mat.sqlitetut.Utils;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import com.mat.sqlitetut.models.Contact;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -41,4 +45,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP IF TABLE EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
+    /*
+    Insert a new contact to database
+     */
+    public boolean addContact(Contact contact) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL1, contact.getName());
+        contentValues.put(COL2, contact.getPhoneNumber());
+        contentValues.put(COL3, contact.getDevice());
+        contentValues.put(COL4, contact.getEmail());
+        contentValues.put(COL5, contact.getProfileImage());
+
+        long result = db.insert(TABLE_NAME, null, contentValues);
+
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /*
+    Retrieve all contacts from database
+     */
+    public Cursor getAllContacts() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    }
+
 }

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import com.mat.sqlitetut.MainActivity;
 import com.mat.sqlitetut.R;
+import com.mat.sqlitetut.models.Contact;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,7 +54,7 @@ public class AddContactFragment extends Fragment implements ChangePhotoDialog.On
         toolbar = (Toolbar) view.findViewById(R.id.contactToolbar);
         Log.d(TAG, "onCreateView: started");
 
-        mSelectDevice = null;
+        mSelectedImagePath = null;
 
         //Load the default image by causing an error
         UniversalImageLoader.setImage(null,mContactImage,null,"");
@@ -73,16 +75,6 @@ public class AddContactFragment extends Fragment implements ChangePhotoDialog.On
                 Log.d(TAG, "onClick: clicked back arrow.");
                 //remove previous fragment from the backstack (therefore navigating back)
                 getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
-
-        // save new contact
-        ImageView ivCheckMark = (ImageView) view.findViewById(R.id.ivCheckMark);
-        ivCheckMark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: saving the contact");
-                //execute the save method for the database
             }
         });
 
@@ -111,9 +103,42 @@ public class AddContactFragment extends Fragment implements ChangePhotoDialog.On
             }
         });
 
+        //set onClickListener to the 'checkmark' icon for saving a contact
+        ImageView confirmNewContact = (ImageView) view.findViewById(R.id.ivCheckMark);
+        confirmNewContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: attempting to save new contact");
+                if (checkStringIfNuill(mName.getText().toString())) {
+                    Log.d(TAG, "onClick: saving new contact " + mName.getText().toString());
+
+                    DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+                    Contact contact = new Contact(mName.getText().toString(),
+                            mPhoneNumber.getText().toString(),
+                            mSelectDevice.getSelectedItem().toString(),
+                            mEmail.getText().toString(),
+                            mSelectedImagePath);
+                    if (databaseHelper.addContact(contact)) {
+                        Toast.makeText(getActivity(), "Contact Saved", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
         initOnTextChangeListener();
 
         return view;
+    }
+
+    private boolean checkStringIfNuill(String string) {
+        if (string.equals("")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
