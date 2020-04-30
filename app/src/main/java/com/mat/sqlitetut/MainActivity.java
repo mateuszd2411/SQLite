@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.mat.sqlitetut.Utils.AddContactFragment;
 import com.mat.sqlitetut.Utils.UniversalImageLoader;
 import com.mat.sqlitetut.models.Contact;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -19,7 +20,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements
         ViewContactsFragment.OnContactSelectedListener,
-        ContactFragment.OnEditContactListenner{
+        ContactFragment.OnEditContactListenner,
+        ViewContactsFragment.OnAddContactListener{
 
     private static final String TAG = "MainActivity";
 
@@ -56,6 +58,18 @@ public class MainActivity extends AppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container,fragment);
         transaction.addToBackStack(getString(R.string.contact_fragment));
+        transaction.commit();
+    }
+
+    @Override
+    public void onAddContact() {
+        Log.d(TAG, "onAddContact: navigating to " + getString(R.string.add_contact_fragment));
+
+        AddContactFragment fragment = new AddContactFragment();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container,fragment);
+        transaction.addToBackStack(getString(R.string.add_contact_fragment));
         transaction.commit();
     }
 

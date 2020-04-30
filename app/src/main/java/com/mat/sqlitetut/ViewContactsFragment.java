@@ -34,6 +34,11 @@ public class ViewContactsFragment extends Fragment {
     }
     OnContactSelectedListener mContactListener;
 
+    public interface OnAddContactListener{
+        public void onAddContact();
+    }
+
+    OnAddContactListener mOnAddContact;
 
     //variables and widgets
     private static final int STANDARD_APPBAR = 0;
@@ -62,6 +67,7 @@ public class ViewContactsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked fab");
+                mOnAddContact.onAddContact();
             }
         });
 
@@ -92,7 +98,8 @@ public class ViewContactsFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            mContactListener = (OnContactSelectedListener)getActivity();
+            mContactListener = (OnContactSelectedListener) getActivity();
+            mOnAddContact = (OnAddContactListener) getActivity();
         } catch (ClassCastException e) {
             Log.d(TAG, "onAttach: ClassCastException: " + e.getMessage() );
         }
