@@ -27,6 +27,9 @@ import com.mat.sqlitetut.Utils.DatabaseHelper;
 import com.mat.sqlitetut.models.Contact;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class ViewContactsFragment extends Fragment {
@@ -155,7 +158,15 @@ public class ViewContactsFragment extends Fragment {
             ));
         }
 
-        Log.d(TAG, "setupContactsList: image url: " + contacts.get(0).getProfileImage());
+//        Log.d(TAG, "setupContactsList: image url: " + contacts.get(0).getProfileImage());
+
+        //sort the arrayList based on the contact name
+        Collections.sort(contacts, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact contact, Contact t1) {
+                return contact.getName().compareToIgnoreCase(t1.getName());
+            }
+        });
 
         adapter = new ContactListAdapter(getActivity(),R.layout.layout_contactslistitem,contacts,"");
 
