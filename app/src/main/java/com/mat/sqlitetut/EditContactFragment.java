@@ -3,14 +3,19 @@ package com.mat.sqlitetut;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -47,12 +52,46 @@ public class EditContactFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.contactToolbar);
         Log.d(TAG, "onCreateView: started");
 
+        //required for setting up the toolbar
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
+
         //get the contact from the bundle
         mContact = getContactFromBundle();
         
         if (mContact != null){
             init();
         }
+
+        //navigation for the backarrow
+        ImageView ivBackArrow = (ImageView) view.findViewById(R.id.ivBackArrow);
+        ivBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: clicked back arrow.");
+                //remove previous fragment from the backstack (therefore navigating back)
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+        // save changes to the contact
+        ImageView ivCheckMark = (ImageView) view.findViewById(R.id.ivCheckMark);
+        ivCheckMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: saving the edited contace");
+                //execute the save method for the database
+            }
+        });
+
+        //initiate the dialog box for choosing an image
+        ImageView ivCamera = (ImageView) view.findViewById(R.id.ivCamera);
+        ivCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: opening the 'image selection dialog box'");
+            }
+        });
 
         return view;
     }
@@ -84,5 +123,21 @@ public class EditContactFragment extends Fragment {
         }else{
             return null;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.contact_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.menuitem_delete:
+                Log.d(TAG, "onOptionsItemSelected: deleting contact.");
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
