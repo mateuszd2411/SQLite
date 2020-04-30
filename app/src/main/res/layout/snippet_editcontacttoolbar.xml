@@ -25,12 +25,12 @@
                     android:src="@drawable/ic_backarrow"/>
 
                 <TextView
+                    android:id="@+id/textContactToolbar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivBackArrow"
                     android:textSize="20sp"
                     android:textColor="@color/white"
-                    android:text="Edit Contact"
                     android:layout_marginStart="20dp"/>
 
                 <ImageView

@@ -9,6 +9,8 @@
 
     <!-- keys  -->
     <string name="contact">Contact</string>
+    <string name="edit_contact">Edit Contact</string>
+    <string name="add_contact">Add Contact</string>
 
     <string-array name="device_options">
         <item>Mobile</item>
