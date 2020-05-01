@@ -1,6 +1,7 @@
 package com.mat.sqlitetut;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.mat.sqlitetut.Utils.ContactPropertyListAdapter;
+import com.mat.sqlitetut.Utils.DatabaseHelper;
 import com.mat.sqlitetut.Utils.UniversalImageLoader;
 import com.mat.sqlitetut.models.Contact;
 
@@ -115,14 +118,48 @@ public class ContactFragment extends Fragment{
         switch (item.getItemId()){
             case R.id.menuitem_delete:
                 Log.d(TAG, "onOptionsItemSelected: deleting contact.");
+                DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+                Cursor cursor = databaseHelper.getContactID(mContact);
+
+                int contactID = -1;
+                while (cursor.moveToNext()) {
+                    contactID = cursor.getInt(0);
+                }
+                if (contactID > -1) {
+                    if (databaseHelper.deleteContact(contactID) > 0) {
+                        Toast.makeText(getActivity(), "Contact Deleted", Toast.LENGTH_SHORT).show();
+
+                        //clear the arguments ont he current bundle since the contact is deleted
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+        Cursor cursor = databaseHelper.getContactID(mContact);
+
+        int contactID = -1;
+        while (cursor.moveToNext()) {
+            contactID = cursor.getInt(0);
+        }
+        if (contactID > -1) {// If the contact doesn't exist then navigate back by popping the stack
+            init();
+        } else {
+            this.getArguments().clear(); // optional clear arguments
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+    }
 
     /*
-    Retries the selected contact from the bundle(coming from MainActivity
-     */
+        Retries the selected contact from the bundle(coming from MainActivity
+         */
     private Contact getContactFromBundle(){
         Log.d(TAG, "getContactFromBundle: arguments: " + getArguments());
 
